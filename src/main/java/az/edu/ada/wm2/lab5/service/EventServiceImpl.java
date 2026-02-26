@@ -146,7 +146,26 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> getEventsByDateRange(LocalDateTime start, LocalDateTime end) {
-        return List.of();
+        if (start != null && end != null && start.isAfter(end)) {
+            LocalDateTime tmp = start;
+            start = end;
+            end = tmp;
+        }
+
+        final LocalDateTime s = start;
+        final LocalDateTime e = end;
+
+        return eventRepository.findAll().stream()
+                .filter(ev -> ev != null)
+                .filter(ev -> ev.getEventDateTime() != null)
+                .filter(ev -> {
+                    LocalDateTime dt = ev.getEventDateTime();
+                    boolean okStart = (s == null) || !dt.isBefore(s); // dt >= start
+                    boolean okEnd = (e == null) || !dt.isAfter(e);    // dt <= end
+                    return okStart && okEnd;
+                })
+                .sorted((a, b) -> a.getEventDateTime().compareTo(b.getEventDateTime()))
+                .collect(Collectors.toList());
     }
 
     @Override
