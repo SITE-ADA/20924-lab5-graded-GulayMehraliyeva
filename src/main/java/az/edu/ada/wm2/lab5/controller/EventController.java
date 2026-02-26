@@ -99,11 +99,6 @@ public class EventController {
 
 
 
-
-
-
-
-
     @GetMapping("/filter/date")
     public ResponseEntity<List<Event>> filterByDateRange(@RequestParam LocalDateTime start,
                                                          @RequestParam LocalDateTime end) {
@@ -153,10 +148,8 @@ public class EventController {
             Event updated = eventService.updateEventPrice(id, price);
             return new ResponseEntity<>(updated, HttpStatus.OK);
         } catch (RuntimeException e) {
-            // event not found
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            // invalid price, etc.
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
