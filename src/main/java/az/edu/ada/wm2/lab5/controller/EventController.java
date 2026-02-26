@@ -136,4 +136,14 @@ public class EventController {
         }
     }
 
+    @GetMapping("/upcoming")
+    public ResponseEntity<List<Event>> getUpcoming() {
+        try {
+            List<Event> upcoming = eventService.getUpcomingEvents();
+            return new ResponseEntity<>(upcoming, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
